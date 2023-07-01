@@ -1,15 +1,18 @@
-# dependencies
-node_modules
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-# sst
-.sst
-.build
+# Test binary, built with `go test -c`
+*.test
 
-# opennext
-.open-next
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
 
-# misc
-.DS_Store
+# Dependency directories (remove the comment below to include it)
+# vendor/
 
-# local env files
-.env*.local
+# Go workspace file
+go.work

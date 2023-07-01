@@ -97,6 +97,8 @@ func Search(options *SearchOptions) ([]*Book, error) {
 		return nil, err
 	}
 
+	fmt.Println(string(b))
+
 	// Get hashes from raw webpage and store them in hashes
 	hashes := parseHashes(b, options.Results)
 
