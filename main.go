@@ -9,14 +9,12 @@ import (
 
 func main() {
 	results, err := libgen.Search(&libgen.SearchOptions{
-		Query:        "kubernetes",
+		Query:        "stephen king",
 		SearchMirror: libgen.GetWorkingMirror(libgen.SearchMirrors),
-		Results:      1,
+		Results:      10,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(len(results))
-	fmt.Println(results[0])
-	fmt.Println(results[0].Md5)
 }
