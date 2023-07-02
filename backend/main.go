@@ -83,11 +83,46 @@ func GetBooksHandler(c *fiber.Ctx) error {
 	})
 }
 
+func GetDownloadLink(c *fiber.Ctx) error {
+	query := c.Query("hash")
+
+	if query == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "hash cannot be empty",
+		})
+	}
+
+	book, err := libgen.GetDetails(&libgen.GetDetailsOptions{
+		Hashes:       []string{query},
+		SearchMirror: libgen.GetWorkingMirror(libgen.SearchMirrors),
+		Print:        false,
+	})
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Sorry! server error",
+		})
+	}
+
+	x, err := libgen.GetDownloadURL(book[0])
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err,
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message":     "success",
+		"downloadURL": x,
+	})
+}
+
 func main() {
+
 	app := fiber.New()
 
 	app.Get("/", GetHandler)
 	app.Get("/api", GetBooksHandler)
+	app.Get("/api/link", GetDownloadLink)
 
 	app.Listen(getPort())
 }
