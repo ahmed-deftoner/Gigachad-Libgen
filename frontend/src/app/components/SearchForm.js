@@ -5,17 +5,34 @@ const SearchForm = () => {
   const [searchResults, setSearchResults] = useState([]);
 
   const handleSearch = async (e) => {
+    const search = String(searchTerm).toLowerCase().replace(/ /g, "%")
+    console.log(search)
     try {
       const response = await fetch(
-        `https://fiber-production-d37b.up.railway.app/api?search=${searchTerm}&limit=5`
+        `https://fiber-production-d37b.up.railway.app/api?search=${search}&limit=5`
       );
-      const data = await response;
-      console.log(data);
-      setSearchResults(data);
+      const data = await response.json();
+      console.log(data.results);
+      setSearchResults(data.results);
     } catch (error) {
       console.log(error);
     }
+    console.log(searchResults)
   };
+
+  async function handleDownload(md5) {
+
+    console.log(md5)
+    try {
+      const response = await fetch(
+        `https://fiber-production-d37b.up.railway.app/api/link?hash=${md5}`
+      );
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className="search-form">
@@ -28,10 +45,11 @@ const SearchForm = () => {
       <button onClick={handleSearch}>Search</button>
 
       <div className="search-results">
-        {searchResults.map((result) => (
-          <div className="search-result">
-            <h3>{"result.title"}</h3>
-            <p>{"result.description"}</p>
+        {searchResults.map((result, id) => (
+          <div key={id} className="search-result">
+            <h3>{result.Title}</h3>
+            <p>{result.Author}</p>
+            <button onClick={() => handleDownload(result.Md5)}>Download</button>
           </div>
         ))}
       </div>
